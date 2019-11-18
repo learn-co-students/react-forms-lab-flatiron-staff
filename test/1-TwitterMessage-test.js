@@ -1,6 +1,7 @@
 import React from "react";
 import { expect } from "chai";
 import { configure, shallow } from "enzyme";
+import { isValueInState, noop } from "./util";
 
 import TwitterMessage from "../src/components/TwitterMessage";
 import Adapter from 'enzyme-adapter-react-16'
@@ -13,10 +14,15 @@ describe("<TwitterMessage />", () => {
       const wrapper = shallow(<TwitterMessage maxChars={140} />);
       const event = { target: { value: "f" } };
       wrapper.find("input").simulate("change", event);
-      expect(wrapper.find("input").props().value).to.deep.equal(
-        event.target.value,
+      // expect(wrapper.find("input").props().value).to.deep.equal(
+      //   event.target.value,
+      //   "The input value is not being updated when it changes"
+      // );
+      expect(
+        isValueInState(wrapper.state(), "f"),
         "The input value is not being updated when it changes"
-      );
+      ).to.be.true;
+
     });
   });
 
